@@ -315,24 +315,24 @@
   </div>
 
   <div class="card">
-    <div class="cardTitle">3｜大人自我加油（補能量 Buff）</div>
-    <div class="quote" id="cheerText">你不是差勁，是太累了！</div>
+    <div class="cardTitle">3｜為自己加油（能量補給）</div>
+    <div class="quote" id="cheerText">不是差勁，是太累了</div>
     <button class="secondary" onclick="cheerMeUp()">💛 給我一句加油</button>
     <div class="tiny">這裡不評分，只補電。</div>
   </div>
 
   <div class="card">
-    <div class="cardTitle">4｜狂按舒壓（按到你笑出來）</div>
+    <div class="cardTitle">4｜狂按舒壓（不笑不行）</div>
     <div class="quote" id="smashText">讓你按！這裡不會按壞任何東西。</div>
     <button onclick="smash()">🫧 一直按也沒關係</button>
     <div class="spark" id="smashSpark"></div>
-    <div class="tiny">連按會出現驚喜，按按舒壓一下！</div>
+    <div class="tiny">連按會出現驚喜！</div>
   </div>
 
   <div class="card">
-    <div class="cardTitle">5｜我的句子（你自己最懂你）</div>
+    <div class="cardTitle">5｜記下自己的句子</div>
     <div class="tiny" style="text-align:left; margin-top:0;">
-      把你「說得出口、聽起來舒服、用完心會鬆」的句子存起來。下次就會抽到。
+      自己覺得「幽默，有才，有創意」的句子存起來。下次就會抽到。
     </div>
 
     <textarea id="customInput" rows="2" placeholder="例如：你吵你的，我先練靜心功，晚點再來談。"></textarea>
@@ -569,14 +569,14 @@ function autoEggOncePerDay(){
 let smashCombo = 0;
 let smashTimer = null;
 
-const smashWords = ["啪！","咚！","呼——","哈哈！","中獎囉！","太有才了！","真行","哇塞","很可以。","福氣到。"];
+const smashWords = ["啪！","咚！","和氣生財","哈哈！","中獎囉！","太有才了！","真行","哇塞","很可以。","福氣到！"];
 const smashSurprises = [
   "🎈 驚喜：你剛剛按掉了 1 顆「委屈球」。",
   "🍊 驚喜：情緒已切換成「橘子模式」：酸甜可控。",
   "🧠 驚喜：前額葉回來上班了（但可能還在路上）。",
   "🫶 驚喜：你已經夠好了，先休息一下。",
   "🎬 驚喜：這段可以剪掉，改成溫柔版。",
-  "🧯 驚喜：你剛剛其實在滅火。很會。"
+  "🧯 驚喜：你剛剛其實在滅火，很優秀。"
 ];
 
 function smash(){
@@ -638,7 +638,7 @@ function renderCustom(){
     const d = document.createElement("div");
     d.className = "tiny";
     d.style.textAlign = "left";
-    d.textContent = "目前還沒有自創句子。你存一句，下次就會出現。";
+    d.textContent = "目前還沒有自創句子。存一句，下次就會出現";
     box.appendChild(d);
     return;
   }
