@@ -1,632 +1,183 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>幸福教養工具箱｜模組1｜大人先穩 v1.0</title>
-
-  <meta name="theme-color" content="#f0a04b" />
-  <meta name="background-color" content="#fff8ee" />
-  <meta name="description" content="模組1｜現場急救×錦囊妙計×每日練功×回饋獎勵" />
-
-  <link rel="manifest" href="./manifest.json" />
-  <link rel="icon" href="./icon-192.png" />
-  <link rel="apple-touch-icon" href="./icon-192.png" />
-
-  <style>
-    :root{
-      --bg1:#fff2df;
-      --bg2:#ffe8f3;
-      --ink:#2b2a26;
-      --muted:#6c5d4b;
-      --brand:#ff8a3d;
-      --brand2:#ffd166;
-      --mint:#3dd6a6;
-      --sky:#5aa9ff;
-      --pink:#ff6fb1;
-      --card:#ffffff;
-      --shadow:0 12px 28px rgba(0,0,0,.10);
-      --r:18px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, "Noto Sans TC", sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(1200px 600px at 10% 0%, var(--bg2), transparent 60%),
-        radial-gradient(1200px 600px at 90% 0%, #e9fff6, transparent 55%),
-        var(--bg1);
-    }
-
-    .app{max-width: 860px; margin:0 auto; padding:16px;}
-    .hidden{display:none !important;}
-
-    /* Topbar */
-    .topbar{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-      padding:8px 4px 6px;
-    }
-    .title{font-size:20px; font-weight:1000; letter-spacing:.5px;}
-    .sub{margin-top:4px; color:var(--muted); font-weight:900; font-size:13px; line-height:1.4;}
-    .topbarBtns{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;}
-
-    /* Cards */
-    .card{
-      background: var(--card);
-      border-radius: var(--r);
-      padding: 16px;
-      margin: 14px 0;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(0,0,0,.05);
-    }
-    .h2{margin:0 0 10px; font-size:18px; font-weight:1000;}
-    .h3{margin:0 0 8px; font-size:14px; font-weight:1000; color:var(--ink);}
-    .tiny{margin:10px 0 0; color:var(--muted); font-weight:900; font-size:13px; line-height:1.5;}
-
-    /* Hero */
-    .hero{
-      background:
-        radial-gradient(800px 240px at 20% 0%, rgba(255,111,177,.20), transparent 60%),
-        radial-gradient(800px 240px at 85% 0%, rgba(61,214,166,.18), transparent 60%),
-        #fff;
-    }
-    .heroTitle{font-size:20px; font-weight:1000; margin-bottom:10px;}
-
-    /* Quotes */
-    .quote{
-      background: linear-gradient(180deg, rgba(255,138,61,.14), rgba(255,255,255,1));
-      border: 1px solid rgba(0,0,0,.06);
-      border-radius: 14px;
-      padding: 12px;
-      line-height: 1.6;
-      font-weight: 900;
-      min-height: 46px;
-    }
-
-    /* Layout */
-    .row{display:flex; gap:10px; margin-top: 12px; flex-wrap:wrap;}
-    .twoCols{display:grid; grid-template-columns:1fr; gap:14px;}
-    @media (min-width: 720px){
-      .twoCols{grid-template-columns:1fr 1fr;}
-    }
-
-    /* Timer */
-    .timerRow{
-      display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      gap:10px;
-      margin-top:10px;
-      flex-wrap:wrap;
-    }
-    .timer{
-      font-size:34px;
-      font-weight:1000;
-      letter-spacing:1px;
-    }
-    .phase{
-      font-weight:1000;
-      color:var(--muted);
-      background: rgba(255,255,255,.9);
-      border:1px solid rgba(0,0,0,.08);
-      border-radius:999px;
-      padding:6px 10px;
-      font-size:12px;
-    }
-
-    /* Reward */
-    .badgeRow{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
-    .badge{
-      display:inline-block;
-      font-size: 12px;
-      font-weight: 1000;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(255,138,61,.16);
-      border: 1px solid rgba(255,138,61,.28);
-    }
-    .bar{
-      height: 12px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.08);
-      overflow:hidden;
-      margin: 12px 0 8px;
-    }
-    .fill{
-      height:100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--mint), var(--brand2), var(--pink));
-    }
-    .meta{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      font-weight:1000;
-      color:var(--muted);
-    }
-
-    /* Buttons */
-    .btn{
-      flex:1;
-      min-width: 160px;
-      padding: 12px 12px;
-      font-size: 16px;
-      border: none;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--brand), var(--brand2));
-      color: #1d1b16;
-      font-weight: 1000;
-      cursor:pointer;
-      box-shadow: 0 12px 18px rgba(255,138,61,.22);
-    }
-    .btn:active{transform: translateY(1px)}
-    .btn.ghost{
-      background:#fff;
-      color:var(--ink);
-      border:1px solid rgba(0,0,0,.12);
-      box-shadow:none;
-    }
-    .btn.small{
-      min-width:auto;
-      padding:8px 10px;
-      font-size:13px;
-      border-radius:12px;
-      flex:0 0 auto;
-    }
-    .btn.big{
-      width:100%;
-      min-width: 100%;
-      padding: 14px 14px;
-      font-size: 17px;
-    }
-
-    .footer{
-      padding: 10px 4px 24px;
-      text-align:center;
-      color:var(--muted);
-      font-weight:900;
-      font-size:12px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>幽默情緒急救包</title>
+<meta name="theme-color" content="#f5b041">
+<style>
+  body {
+    margin: 0;
+    font-family: "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont;
+    background: linear-gradient(180deg, #fff6e5, #ffe0b2);
+    color: #4a3b2a;
+  }
+  .app {
+    max-width: 420px;
+    margin: auto;
+    padding: 20px 16px 32px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 0.85rem;
+    opacity: 0.75;
+    margin-bottom: 20px;
+  }
+  .card {
+    background: rgba(255,255,255,0.85);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  }
+  .card p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    text-align: center;
+    margin: 0;
+  }
+  button {
+    width: 100%;
+    border: none;
+    border-radius: 999px;
+    padding: 12px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  .primary { background: #f5b041; color: #fff; }
+  .secondary { background: #ffe0b2; }
+  .ghost {
+    background: transparent;
+    border: 1px dashed #d4a373;
+    color: #6b4f2c;
+  }
+  .small { font-size: 0.8rem; padding: 8px; }
+  textarea {
+    width: 100%;
+    border-radius: 12px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    font-size: 0.85rem;
+  }
+  .footer-btns button {
+    margin-top: 8px;
+  }
+</style>
 </head>
 
 <body>
-  <div class="app">
-    <header class="topbar">
-      <div>
-        <div class="title">幸福教養工具箱</div>
-        <div class="sub">模組1｜大人先穩：急救 × 錦囊 × 每日練功</div>
-      </div>
-      <div class="topbarBtns">
-        <button class="btn ghost small" data-action="openFeedback" type="button">回饋表單</button>
-        <button class="btn ghost small" data-action="toggleHelp" type="button">安裝教學</button>
-      </div>
-    </header>
+<div class="app">
 
-    <!-- 快速入口 -->
-    <section class="card hero">
-      <div class="heroTitle">現在先讓自己穩定一點</div>
-      <button class="btn big" data-action="startRescue" type="button">撐不住了｜先急救</button>
-      <div class="tiny">先做 30 秒就好。做完再說。</div>
-    </section>
+<h1>🤡 幽默情緒急救包</h1>
+<div class="subtitle">給已經很努力的大人，一個先笑一下的空間</div>
 
-    <!-- 1 現場急救 -->
-    <section class="card rescue">
-      <div class="h2">1｜現場急救（30 秒）</div>
+<!-- 荒謬急救 -->
+<div class="card">
+  <p id="absurdText">點一下，讓腦回來。</p>
+  <button class="primary" onclick="absurdRescue()">我現在真的很荒謬</button>
+</div>
 
-      <div class="quote" id="rescueLine">按上面的「先急救」，就會開始。</div>
+<!-- 家長幽默回應 -->
+<div class="card">
+  <p id="parentText">孩子在氣，大人先穩。</p>
+  <button class="secondary" onclick="parentRescue()">給我一句幽默回應</button>
+</div>
 
-      <div class="timerRow">
-        <div class="timer" id="timerText">00:30</div>
-        <div class="phase" id="phaseText">準備</div>
-      </div>
+<!-- 家長自創 -->
+<div class="card">
+  <p style="font-size:0.8rem; opacity:.7; text-align:center;">也可以留下你自己的版本</p>
+  <textarea id="customInput" rows="2" placeholder="例如：你吵你的，我穩我的，晚點再來談。"></textarea>
+  <button class="ghost small" onclick="saveCustom()">存起來，下次用</button>
+</div>
 
-      <div class="row">
-        <button class="btn" data-action="startRescue" type="button">開始</button>
-        <button class="btn ghost" data-action="stopRescue" type="button">停止</button>
-        <button class="btn ghost" data-action="logDone" data-kind="rescue" type="button">完成一次急救</button>
-      </div>
+<!-- 一鍵安裝 -->
+<div class="card">
+  <button class="primary" onclick="installApp()">一鍵安裝到手機</button>
+</div>
 
-      <div class="tiny">提示：吸 4 秒、吐 6 秒，跟著走就好。</div>
-    </section>
+<!-- 外連 -->
+<div class="card footer-btns">
+  <button class="secondary" onclick="goConcept()">幸福教養概念館</button>
+  <button class="secondary" onclick="goChannel()">天使笑長頻道</button>
+  <button class="ghost small">回饋表單（預留）</button>
+</div>
 
-    <!-- 2 錦囊妙計 -->
-    <section class="card tips">
-      <div class="h2">2｜錦囊妙計</div>
+</div>
 
-      <div class="twoCols">
-        <div>
-          <div class="h3">心裡想的（先讓心裡穩定一點）</div>
-          <button class="btn" data-action="pickInner" type="button">給一句</button>
-          <div class="quote" id="innerOut">（會出現一句內在提示）</div>
-        </div>
-        <div>
-          <div class="h3">說出口的（現在說得出口的話）</div>
-          <button class="btn" data-action="pickOuter" type="button">給一句</button>
-          <div class="quote" id="outerOut">（會出現一句可說出口的話）</div>
-        </div>
-      </div>
+<script>
+let deferredPrompt = null;
+window.addEventListener("beforeinstallprompt", e => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
 
-      <div class="row">
-        <button class="btn ghost" data-action="logDone" data-kind="tips" type="button">用了一次錦囊</button>
-      </div>
-    </section>
+function installApp() {
+  if (!deferredPrompt) {
+    alert("此裝置目前無法安裝，但你已經可以直接使用 😊");
+    return;
+  }
+  deferredPrompt.prompt();
+  deferredPrompt = null;
+}
 
-    <!-- 3 每日練功 -->
-    <section class="card practice">
-      <div class="h2">3｜每日練功（點一下就算）</div>
-      <div class="quote" id="dailyQ">（今天練功題目會出現在這裡）</div>
+const absurdList = [
+  "恭喜你，剛剛差點把一件小事演成八點檔。",
+  "冷靜點，誰那麼偉大，讓你不開心。",
+  "提醒：孩子不是你的人生 KPI。",
+  "放心，你不是差勁，你只是累了。",
+  "此刻的你，需要的不是方法，是找樓梯下。",
+  "這一刻如果有觀眾，收視率會很高。",
+  "這不是世界末日，只是晚餐前。",
+  "先下戲，等等再回來也可以。"
+];
 
-      <div class="row">
-        <button class="btn" data-action="dailyPick" data-choice="done" type="button">有做到</button>
-        <button class="btn" data-action="dailyPick" data-choice="almost" type="button">差一點</button>
-        <button class="btn" data-action="dailyPick" data-choice="next" type="button">下次再練</button>
-      </div>
+const parentList = [
+  "你生氣，我不氣，壞脾氣會處罰自己。",
+  "你吼你的，我穩我的，等等再說。",
+  "我現在先當大人，晚點再當教練。",
+  "這一刻先不教育，先保命。",
+  "孩子在練情緒，我在練定力。",
+  "我不急著贏，關係比較重要。"
+];
 
-      <div class="tiny">不打卡、不評分；願意回來就很好。</div>
-    </section>
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
-    <!-- 4 回饋獎勵 -->
-    <section class="card reward">
-      <div class="h2">4｜回饋獎勵</div>
+function absurdRescue() {
+  document.getElementById("absurdText").innerText = pick(absurdList);
+}
 
-      <div class="badgeRow">
-        <span class="badge" id="presenceBadge">最近有回來</span>
-        <span class="tiny" id="presenceText">願意回來，就在路上。</span>
-      </div>
+function parentRescue() {
+  const custom = JSON.parse(localStorage.getItem("customLines") || "[]");
+  const pool = parentList.concat(custom);
+  document.getElementById("parentText").innerText = pick(pool);
+}
 
-      <div class="bar">
-        <div class="fill" id="seedFill"></div>
-      </div>
-      <div class="meta">
-        <span id="seedMeta">累積：0</span>
-        <button class="btn ghost small" data-action="softReset" type="button">輕清空</button>
-      </div>
+function saveCustom() {
+  const input = document.getElementById("customInput");
+  if (!input.value.trim()) return;
+  const list = JSON.parse(localStorage.getItem("customLines") || "[]");
+  list.push(input.value.trim());
+  localStorage.setItem("customLines", JSON.stringify(list));
+  input.value = "";
+  alert("已存，下次會出現 😊");
+}
 
-      <div class="quote" id="praiseOut">（完成任一項會出現回饋）</div>
+function goConcept() {
+  window.open("https://angel0973180707.github.io/angel-happy-paw/", "_blank");
+}
 
-      <div class="tiny">想讓工具更好用：可以點右上角「回饋表單」。</div>
-    </section>
+function goChannel() {
+  window.open("https://www.youtube.com/", "_blank");
+}
+</script>
 
-    <!-- 安裝教學 -->
-    <section class="card hidden" id="helpBox">
-      <div class="h2">📲 加到手機主畫面（像 App 一樣用）</div>
-
-      <div class="quote">
-        <div class="h3">Android（Chrome）</div>
-        <div class="tiny">
-          1️⃣ 點右上角「⋮」<br/>
-          2️⃣ 選「加到主畫面」<br/>
-          3️⃣ 如果是別人傳的連結：<br/>
-          👉 先把網址複製，貼到 Chrome 打開，再加到主畫面
-        </div>
-      </div>
-
-      <div class="quote" style="margin-top:12px;">
-        <div class="h3">iPhone（Safari）</div>
-        <div class="tiny">
-          1️⃣ 用 Safari 打開這個網址<br/>
-          2️⃣ 點下方「分享」<br/>
-          3️⃣ 選「加入主畫面」<br/>
-          👉 如果是從 Line 或其他 App 點進來：<br/>
-          建議把網址複製，貼到 Safari 打開再操作
-        </div>
-      </div>
-
-      <div class="tiny">加不加都沒關係，用得順比較重要。</div>
-
-      <div class="row">
-        <button class="btn" id="btnInstall" disabled type="button">一鍵加入（可用會亮）</button>
-        <button class="btn ghost" data-action="toggleHelp" type="button">關閉</button>
-      </div>
-    </section>
-
-    <footer class="footer">
-      v1.0｜模組1重寫版（穩定可用）｜幸福教養工具箱
-    </footer>
-  </div>
-
-  <script>
-    // ✅ 你把回饋表單網址貼在這裡（Google Forms / Typeform / 任何網址都可）
-    const FEEDBACK_URL = "https://forms.gle/你的表單網址";
-
-    // --- SW 註冊 ---
-    (function registerSW(){
-      if (!("serviceWorker" in navigator)) return;
-      window.addEventListener("load", async () => {
-        try { await navigator.serviceWorker.register("./sw.js"); } catch(e) {}
-      });
-    })();
-
-    const LS_KEY = "HP_TOOLBOX_M1_V1";
-    const nowISO = () => new Date().toISOString();
-
-    const TEXT = {
-      m1: {
-        inner: [
-          "先讓自己穩定一點。",
-          "有點撐，先緩一下。",
-          "先深呼吸幾下就好。",
-          "先讓情緒慢下來。",
-          "事情等等再處理。",
-          "先站穩，再想下一步。",
-          "慢一點也沒關係。",
-          "先停一下，腦子才跟得上。",
-          "先喝口水、換口氣。",
-          "先把聲音放小一點。",
-          "先把肩膀放鬆。",
-          "先讓心跳慢一點。",
-          "先讓臉放鬆。",
-          "先回到呼吸，下一句再說。",
-          "先讓自己回來。",
-          "先讓氣順一點。",
-          "先給自己一點空間。",
-          "先把速度放慢。",
-          "先把重點放在當下。",
-          "先把心穩定下來。"
-        ],
-        outer: [
-          "先停一下，等等再說。",
-          "需要先整理一下，等一下。",
-          "有聽到，給一點時間。",
-          "這件事晚一點再處理。",
-          "先緩一緩。",
-          "先安靜一下。",
-          "先喝口水，等一下再談。",
-          "先去洗把臉，等一下回來。",
-          "先回房間一下，等一下再回來。",
-          "先坐下來，慢一點。",
-          "先把聲音放小一點再談。",
-          "先讓呼吸慢下來，再講。",
-          "先到這裡，等一下再接。",
-          "先休息一下，等一下再繼續。",
-          "先把手上的事放下來，等一下再說。"
-        ],
-        praise: [
-          "剛剛有停一下，現場就改變了。",
-          "願意先緩一緩，已經很有力量。",
-          "有回來用工具，就很了不起。",
-          "能讓自己穩定一點，孩子才有依靠。",
-          "先照顧好狀態，後面才好說話。",
-          "慢下來的那一刻，就是轉折點。"
-        ],
-        dailyPractice: [
-          "今天有沒有先深呼吸再回應？",
-          "今天有沒有把音量放小再說？",
-          "今天有沒有先停三秒再講？",
-          "今天有沒有先離開十秒再回來？",
-          "今天有沒有先喝口水再處理？",
-          "今天有沒有先把速度放慢？"
-        ]
-      }
-    };
-
-    function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-
-    const state = loadState();
-
-    function defaultState(){
-      return {
-        version: "1.0",
-        lastUsedAt: null,
-        count: 0,
-        history: [] // {t, kind}
-      };
-    }
-    function loadState(){
-      try{
-        const raw = localStorage.getItem(LS_KEY);
-        return raw ? { ...defaultState(), ...JSON.parse(raw) } : defaultState();
-      }catch{ return defaultState(); }
-    }
-    function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
-
-    // --- 回饋 UI ---
-    function updateRewardUI(){
-      const badge = document.getElementById("presenceBadge");
-      const text = document.getElementById("presenceText");
-      const fill = document.getElementById("seedFill");
-      const meta = document.getElementById("seedMeta");
-
-      const now = Date.now();
-      const last = state.lastUsedAt ? new Date(state.lastUsedAt).getTime() : null;
-      const recent = last && (now - last <= 72*3600*1000);
-
-      badge.textContent = recent ? "最近有回來" : "想起來就好";
-      text.textContent = recent ? "願意回來，就在路上。" : "不用補作業，回來就好。";
-
-      const pct = Math.min(100, Math.round((state.count/60)*100));
-      fill.style.width = pct + "%";
-      meta.textContent = `累積：${state.count}`;
-    }
-
-    function praise(msg){
-      const out = document.getElementById("praiseOut");
-      out.textContent = msg || pick(TEXT.m1.praise);
-    }
-
-    function logDone(kind){
-      state.count += 1;
-      state.lastUsedAt = nowISO();
-      state.history.push({ t: state.lastUsedAt, kind });
-      if(state.history.length > 200) state.history = state.history.slice(-200);
-      saveState();
-      praise();
-      toast(pick(TEXT.m1.praise));
-      updateRewardUI();
-    }
-
-    // --- Toast ---
-    let toastTimer = null;
-    function toast(msg){
-      let el = document.getElementById("toast");
-      if(!el){
-        el = document.createElement("div");
-        el.id = "toast";
-        Object.assign(el.style, {
-          position:"fixed", left:"50%", bottom:"20px", transform:"translateX(-50%)",
-          background:"rgba(43,42,38,.92)", color:"#fff",
-          padding:"10px 12px", borderRadius:"14px",
-          fontWeight:"900", fontSize:"13px",
-          boxShadow:"0 10px 25px rgba(0,0,0,.20)", zIndex:"9999",
-          maxWidth:"92vw", textAlign:"center"
-        });
-        document.body.appendChild(el);
-      }
-      el.textContent = msg;
-      el.style.display = "block";
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(()=> el.style.display="none", 2000);
-    }
-
-    // --- 急救計時（用時間戳差值，切背景也準） ---
-    let rescueTimerId = null;
-    let rescueEndAt = null;
-    const TOTAL_MS = 30 * 1000;
-
-    function setTimerUI(msLeft, phase){
-      const t = document.getElementById("timerText");
-      const p = document.getElementById("phaseText");
-      const sec = Math.ceil(msLeft/1000);
-      const mm = String(Math.floor(sec/60)).padStart(2,"0");
-      const ss = String(sec%60).padStart(2,"0");
-      t.textContent = `${mm}:${ss}`;
-      p.textContent = phase;
-    }
-
-    function stopRescue(){
-      if(rescueTimerId) clearInterval(rescueTimerId);
-      rescueTimerId = null;
-      rescueEndAt = null;
-      setTimerUI(TOTAL_MS, "準備");
-    }
-
-    function startRescue(){
-      document.getElementById("rescueLine").textContent = pick(TEXT.m1.inner);
-
-      if(rescueTimerId) clearInterval(rescueTimerId);
-      const startAt = Date.now();
-      rescueEndAt = startAt + TOTAL_MS;
-
-      rescueTimerId = setInterval(()=>{
-        const now = Date.now();
-        const left = Math.max(0, rescueEndAt - now);
-
-        const elapsed = now - startAt;
-        const cycle = 10 * 1000;
-        const pos = elapsed % cycle;
-        const phase = pos < 4*1000 ? "吸氣（4）" : "吐氣（6）";
-
-        setTimerUI(left, phase);
-
-        if(left <= 0){
-          stopRescue();
-          document.getElementById("rescueLine").textContent = pick(TEXT.m1.praise);
-          logDone("rescue");
-        }
-      }, 200);
-    }
-
-    // --- 每日練功 ---
-    function loadDailyQ(){
-      document.getElementById("dailyQ").textContent = pick(TEXT.m1.dailyPractice);
-    }
-    function dailyPick(choice){
-      const msg = choice === "done"
-        ? "今天有做到，太好了。"
-        : choice === "almost"
-          ? "差一點也算練到了。"
-          : "想起來就練一下，剛剛這一步就很好。";
-      toast(msg);
-      praise(msg);
-      logDone("daily");
-      loadDailyQ();
-    }
-
-    // --- 錦囊輸出 ---
-    function pickInner(){
-      const s = pick(TEXT.m1.inner);
-      document.getElementById("innerOut").textContent = s;
-      praise("先讓心裡穩定一點，後面才好說話。");
-    }
-    function pickOuter(){
-      const s = pick(TEXT.m1.outer);
-      document.getElementById("outerOut").textContent = s;
-      praise("有一句說得出口的話，現場就能撐住。");
-    }
-
-    // --- 輕清空 ---
-    function softReset(){
-      state.count = 0;
-      saveState();
-      toast("已輕清空回饋（內容保留）");
-      updateRewardUI();
-    }
-
-    // --- 安裝提示 ---
-    let deferredPrompt = null;
-    function setupInstall(){
-      const helpBox = document.getElementById("helpBox");
-      const btnInstall = document.getElementById("btnInstall");
-
-      window.addEventListener("beforeinstallprompt", (e)=>{
-        e.preventDefault();
-        deferredPrompt = e;
-        btnInstall.disabled = false;
-      });
-
-      btnInstall.addEventListener("click", async ()=>{
-        if(!deferredPrompt) return;
-        deferredPrompt.prompt();
-        await deferredPrompt.userChoice;
-        deferredPrompt = null;
-        btnInstall.disabled = true;
-      });
-
-      window.__toggleHelp = () => helpBox.classList.toggle("hidden");
-    }
-
-    // --- 回饋表單 ---
-    function openFeedback(){
-      // 避免你忘了改網址：先保護一下
-      if(!FEEDBACK_URL || FEEDBACK_URL.includes("你的表單網址")){
-        toast("請先在程式裡貼上回饋表單網址（FEEDBACK_URL）");
-        return;
-      }
-      window.open(FEEDBACK_URL, "_blank", "noopener,noreferrer");
-    }
-
-    // --- 事件委派 ---
-    document.addEventListener("click", (e)=>{
-      const btn = e.target.closest("[data-action]");
-      if(!btn) return;
-
-      const act = btn.dataset.action;
-
-      if(act === "startRescue") return startRescue();
-      if(act === "stopRescue") return stopRescue();
-      if(act === "pickInner") return pickInner();
-      if(act === "pickOuter") return pickOuter();
-      if(act === "softReset") return softReset();
-      if(act === "toggleHelp") return window.__toggleHelp?.();
-      if(act === "openFeedback") return openFeedback();
-
-      if(act === "logDone") return logDone(btn.dataset.kind || "manual");
-      if(act === "dailyPick") return dailyPick(btn.dataset.choice || "next");
-    });
-
-    (function init(){
-      setupInstall();
-      updateRewardUI();
-      loadDailyQ();
-      setTimerUI(TOTAL_MS, "準備");
-    })();
-  </script>
 </body>
-  </html>
+</html>
