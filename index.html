@@ -1,131 +1,328 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>幽默情緒急救包</title>
-<meta name="theme-color" content="#f5b041">
+
+<meta name="theme-color" content="#f5b041" />
+<meta name="description" content="幽默情緒急救包｜荒謬急救×家長幽默回應×自創句庫×自我加油×狂按舒壓驚喜" />
+
+<link rel="manifest" href="./manifest.json" />
+<link rel="icon" href="./icon-192.png" />
+<link rel="apple-touch-icon" href="./icon-192.png" />
+
 <style>
-  body {
-    margin: 0;
-    font-family: "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont;
-    background: linear-gradient(180deg, #fff6e5, #ffe0b2);
-    color: #4a3b2a;
+  :root{
+    --bgA:#fff6e5;
+    --bgB:#ffe0b2;
+    --ink:#4a3b2a;
+    --muted:#6b4f2c;
+    --card:rgba(255,255,255,.88);
+    --shadow:0 10px 26px rgba(0,0,0,.10);
+    --r:18px;
+    --brand:#f5b041;
+    --brand2:#ffd6a1;
+    --line:rgba(0,0,0,.10);
   }
-  .app {
-    max-width: 420px;
-    margin: auto;
-    padding: 20px 16px 32px;
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    font-family:"Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont;
+    background: linear-gradient(180deg, var(--bgA), var(--bgB));
+    color:var(--ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-  h1 {
-    text-align: center;
-    font-size: 1.4rem;
-    margin-bottom: 8px;
+  .app{
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 18px 14px 28px;
   }
-  .subtitle {
-    text-align: center;
-    font-size: 0.85rem;
-    opacity: 0.75;
-    margin-bottom: 20px;
+
+  /* 斷字修正（中文不硬切、但超長也不爆） */
+  .wrapSafe{
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+    hyphens: none;
   }
-  .card {
-    background: rgba(255,255,255,0.85);
-    border-radius: 16px;
-    padding: 16px;
-    margin-bottom: 16px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+
+  header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom: 12px;
   }
-  .card p {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    text-align: center;
-    margin: 0;
+  h1{
+    margin:0;
+    font-size: 1.25rem; /* ✅ 略縮小 */
+    font-weight: 1000;
+    letter-spacing:.5px;
+    line-height:1.2;
   }
-  button {
-    width: 100%;
-    border: none;
-    border-radius: 999px;
+  .subtitle{
+    margin-top:6px;
+    font-size:.84rem; /* ✅ 略縮小 */
+    opacity:.78;
+    line-height:1.35;
+  }
+
+  .topBtns{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    min-width: 140px;
+  }
+
+  .card{
+    background: var(--card);
+    border-radius: var(--r);
+    padding: 14px;
+    margin: 12px 0;
+    box-shadow: var(--shadow);
+    border:1px solid rgba(0,0,0,.05);
+  }
+
+  .cardTitle{
+    font-weight:1000;
+    margin: 0 0 10px;
+    font-size: 1.0rem;
+  }
+
+  .quote{
+    border: 1px dashed var(--line);
+    background: rgba(255,255,255,.8);
+    border-radius: 14px;
     padding: 12px;
-    font-size: 0.9rem;
+    line-height: 1.6;
+    font-weight: 900;
+    text-align:center;
+    font-size: .96rem; /* ✅ 略縮小 */
+  }
+  .tiny{
     margin-top: 10px;
-    cursor: pointer;
+    font-size: .82rem;
+    color: var(--muted);
+    opacity: .9;
+    line-height:1.45;
+    text-align:center;
+    font-weight: 900;
   }
-  .primary { background: #f5b041; color: #fff; }
-  .secondary { background: #ffe0b2; }
-  .ghost {
+
+  button{
+    width:100%;
+    border:none;
+    border-radius: 999px;
+    padding: 11px 12px;
+    font-size: .92rem;     /* ✅ 略縮小 */
+    line-height:1.25;      /* ✅ 避免擠壓 */
+    margin-top: 10px;
+    cursor:pointer;
+    font-weight: 1000;
+    color:#2b1f12;
+    background: linear-gradient(135deg, var(--brand), var(--brand2));
+    box-shadow: 0 10px 16px rgba(245,176,65,.22);
+    white-space: normal;     /* ✅ 可換行 */
+    word-break: keep-all;    /* ✅ 中文不硬切 */
+    overflow-wrap: anywhere; /* ✅ 超長不爆 */
+  }
+  button:active{ transform: translateY(1px); }
+  .secondary{
+    background: linear-gradient(135deg, #ffe8c9, #fff2df);
+    box-shadow:none;
+    border: 1px solid rgba(0,0,0,.08);
+  }
+  .ghost{
     background: transparent;
-    border: 1px dashed #d4a373;
+    border: 1px dashed rgba(212,163,115,.75);
     color: #6b4f2c;
+    box-shadow:none;
   }
-  .small { font-size: 0.8rem; padding: 8px; }
-  textarea {
-    width: 100%;
-    border-radius: 12px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    font-size: 0.85rem;
+  .small{
+    font-size: .82rem;
+    padding: 9px 10px;
   }
-  .footer-btns button {
-    margin-top: 8px;
+  .disabled, button:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+    filter: grayscale(.1);
+  }
+
+  textarea{
+    width:100%;
+    border-radius: 14px;
+    padding: 10px 10px;
+    border: 1px solid rgba(0,0,0,.12);
+    font-size: .88rem;
+    line-height:1.4;
+    resize: none;
+    outline: none;
+  }
+
+  .list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-top: 10px;
+  }
+  .item{
+    display:flex;
+    gap:8px;
+    align-items:flex-start;
+  }
+  .itemBtn{
+    flex:1;
+    border-radius: 14px;
+    border:1px solid rgba(0,0,0,.10);
+    background: rgba(255,255,255,.9);
+    padding: 10px 10px;
+    font-weight: 1000;
+    cursor:pointer;
+    text-align:left;
+    line-height:1.35;
+    font-size: .9rem;
+  }
+  .delBtn{
+    border-radius: 14px;
+    border:1px solid rgba(0,0,0,.10);
+    background: rgba(255,255,255,.9);
+    padding: 10px 10px;
+    font-weight: 1000;
+    cursor:pointer;
+    min-width: 64px;
+  }
+
+  .footerBtns button{ margin-top: 8px; }
+
+  /* 小彩蛋顯示區 */
+  .spark{
+    margin-top: 10px;
+    text-align:center;
+    font-weight: 1000;
+    font-size:.9rem;
+    opacity:.92;
   }
 </style>
 </head>
 
 <body>
-<div class="app">
+<div class="app wrapSafe">
 
-<h1>🤡 幽默情緒急救包</h1>
-<div class="subtitle">給已經很努力的大人，一個先笑一下的空間</div>
+  <header>
+    <div>
+      <h1>🤡 幽默情緒急救包</h1>
+      <div class="subtitle">給已經很努力的大人，一個先笑一下、再回來的空間</div>
+    </div>
 
-<!-- 荒謬急救 -->
-<div class="card">
-  <p id="absurdText">點一下，讓腦回來。</p>
-  <button class="primary" onclick="absurdRescue()">我現在真的很荒謬</button>
-</div>
+    <div class="topBtns">
+      <button id="btnInstall" class="small" onclick="installApp()" disabled>一鍵安裝</button>
+      <button class="ghost small" onclick="goConcept()">幸福教養概念館</button>
+      <button class="ghost small" onclick="goChannel()">天使笑長頻道</button>
+      <button class="ghost small" onclick="openFeedback()" disabled>回饋表單（預留）</button>
+    </div>
+  </header>
 
-<!-- 家長幽默回應 -->
-<div class="card">
-  <p id="parentText">孩子在氣，大人先穩。</p>
-  <button class="secondary" onclick="parentRescue()">給我一句幽默回應</button>
-</div>
+  <!-- 1｜荒謬急救 -->
+  <div class="card">
+    <div class="cardTitle">1｜荒謬急救（先笑一下）</div>
+    <div class="quote" id="absurdText">點一下，讓腦回來。</div>
+    <button onclick="absurdRescue()">我現在真的很荒謬</button>
+    <div class="tiny">笑不是逃避，是把大腦從「打架模式」拉回「可以思考模式」。</div>
+  </div>
 
-<!-- 家長自創 -->
-<div class="card">
-  <p style="font-size:0.8rem; opacity:.7; text-align:center;">也可以留下你自己的版本</p>
-  <textarea id="customInput" rows="2" placeholder="例如：你吵你的，我穩我的，晚點再來談。"></textarea>
-  <button class="ghost small" onclick="saveCustom()">存起來，下次用</button>
-</div>
+  <!-- 2｜家長幽默回應 -->
+  <div class="card">
+    <div class="cardTitle">2｜家長幽默回應（撐住現場）</div>
+    <div class="quote" id="parentText">孩子在氣，大人先穩。</div>
+    <button class="secondary" onclick="parentRescue()">給我一句幽默回應</button>
+    <div class="tiny">你不需要馬上教好，你只要先把自己站好。</div>
+  </div>
 
-<!-- 一鍵安裝 -->
-<div class="card">
-  <button class="primary" onclick="installApp()">一鍵安裝到手機</button>
-</div>
+  <!-- 3｜給自己加油（新） -->
+  <div class="card">
+    <div class="cardTitle">3｜大人自我加油（補能量 Buff）</div>
+    <div class="quote" id="cheerText">你不是差勁，你只是累了。</div>
+    <button class="secondary" onclick="cheerMeUp()">💛 給我一句加油</button>
+    <div class="tiny">這裡不評分，只補電。</div>
+  </div>
 
-<!-- 外連 -->
-<div class="card footer-btns">
-  <button class="secondary" onclick="goConcept()">幸福教養概念館</button>
-  <button class="secondary" onclick="goChannel()">天使笑長頻道</button>
-  <button class="ghost small">回饋表單（預留）</button>
-</div>
+  <!-- 4｜狂按舒壓驚喜（新） -->
+  <div class="card">
+    <div class="cardTitle">4｜狂按舒壓（按到你笑出來）</div>
+    <div class="quote" id="smashText">有點煩？來按。這裡不會按壞任何東西。</div>
+    <button onclick="smash()">🫧 一直按也沒關係</button>
+    <div class="spark" id="smashSpark"></div>
+    <div class="tiny">連按會出現驚喜。按到想停就停，沒有作業。</div>
+  </div>
 
+  <!-- 5｜家長自創句庫 -->
+  <div class="card">
+    <div class="cardTitle">5｜我的句子（你自己最懂你）</div>
+    <div class="tiny" style="text-align:left; margin-top:0;">
+      你可以把「你自己會用、說得出口、聽起來舒服」的句子存下來。下次就會抽到。
+    </div>
+
+    <textarea id="customInput" rows="2" placeholder="例如：你吵你的，我穩我的，晚點再來談。"></textarea>
+    <button class="ghost small" onclick="saveCustom()">存起來（下次會抽到）</button>
+
+    <div class="list" id="customList"></div>
+  </div>
+
+  <div class="tiny" style="margin-top:14px;">v1｜幽默情緒急救包｜願意回來就很好。</div>
 </div>
 
 <script>
+/* =========================
+   基本連結（你要換只改這裡）
+========================= */
+const LINKS = {
+  concept: "https://angel0973180707.github.io/angel-happy-paw/",
+  channel: "https://www.youtube.com/@%E5%A4%A9%E4%BD%BF%E7%AC%91%E9%95%B7",
+  feedback: "" // 預留：之後放 Google Form/Notion
+};
+
+function goConcept(){ window.open(LINKS.concept, "_blank", "noopener,noreferrer"); }
+function goChannel(){ window.open(LINKS.channel, "_blank", "noopener,noreferrer"); }
+function openFeedback(){
+  if(!LINKS.feedback) { alert("回饋表單尚未開放（預留中）"); return; }
+  window.open(LINKS.feedback, "_blank", "noopener,noreferrer");
+}
+
+/* =========================
+   一鍵安裝（支援才會亮）
+========================= */
 let deferredPrompt = null;
 window.addEventListener("beforeinstallprompt", e => {
   e.preventDefault();
   deferredPrompt = e;
+  const btn = document.getElementById("btnInstall");
+  btn.disabled = false;
+  btn.textContent = "一鍵安裝";
 });
-
-function installApp() {
-  if (!deferredPrompt) {
-    alert("此裝置目前無法安裝，但你已經可以直接使用 😊");
+window.addEventListener("appinstalled", ()=>{
+  const btn = document.getElementById("btnInstall");
+  btn.disabled = true;
+  btn.textContent = "已安裝";
+});
+async function installApp(){
+  if(!deferredPrompt){
+    alert("此瀏覽器目前無法一鍵安裝（但你仍可直接使用 😊）");
     return;
   }
   deferredPrompt.prompt();
+  try { await deferredPrompt.userChoice; } catch(e){}
   deferredPrompt = null;
 }
 
+/* =========================
+   小工具
+========================= */
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+/* =========================
+   句庫
+========================= */
 const absurdList = [
   "恭喜你，剛剛差點把一件小事演成八點檔。",
   "冷靜點，誰那麼偉大，讓你不開心。",
@@ -133,6 +330,11 @@ const absurdList = [
   "放心，你不是差勁，你只是累了。",
   "此刻的你，需要的不是方法，是找樓梯下。",
   "這一刻如果有觀眾，收視率會很高。",
+  "剛剛那一幕，如果配音樂，已經進副歌了。",
+  "先暫停一下，這段情緒演得有點用力。",
+  "提醒你一下，現在不是年度大結局。",
+  "這一幕可以先剪掉，觀眾會感謝你。",
+  "慢一點，導演喊卡了。",
   "這不是世界末日，只是晚餐前。",
   "先下戲，等等再回來也可以。"
 ];
@@ -143,41 +345,153 @@ const parentList = [
   "我現在先當大人，晚點再當教練。",
   "這一刻先不教育，先保命。",
   "孩子在練情緒，我在練定力。",
-  "我不急著贏，關係比較重要。"
+  "我不急著贏，關係比較重要。",
+  "你的火很大，我先把心放低一點。",
+  "你越大聲，我越小聲，這叫降噪。",
+  "你急，我不急，急也不會比較快。",
+  "先把音量放小，孩子才聽得到愛。"
 ];
 
-function pick(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
+const cheerList = [
+  "你今天已經很努力了，真的。",
+  "沒有爆炸，本身就是一種實力。",
+  "你有回來照顧自己，這很加分。",
+  "你沒有放棄，這一點很重要。",
+  "這不是完美的一天，但你撐住了。",
+  "你願意停一下，表示你很清醒。",
+  "今天的你，值得一句：辛苦了。",
+  "你沒有搞砸，只是太累了。",
+  "願意用工具的人，都是認真的人。",
+  "你已經比昨天多照顧自己一點了。"
+];
 
-function absurdRescue() {
+/* =========================
+   顯示
+========================= */
+function absurdRescue(){
   document.getElementById("absurdText").innerText = pick(absurdList);
 }
-
-function parentRescue() {
-  const custom = JSON.parse(localStorage.getItem("customLines") || "[]");
+function parentRescue(){
+  const custom = loadCustom();
   const pool = parentList.concat(custom);
   document.getElementById("parentText").innerText = pick(pool);
 }
+function cheerMeUp(){
+  document.getElementById("cheerText").innerText = pick(cheerList);
+}
 
-function saveCustom() {
+/* =========================
+   狂按舒壓驚喜
+========================= */
+let smashCount = 0;
+let smashCombo = 0;
+let smashTimer = null;
+
+const smashWords = [
+  "啪！","咚！","呼——","算了。","放掉一點。","情緒掉了一格。","再來一下也行。",
+  "我先不跟自己吵。","這一按，很可以。","腦袋：收到。"
+];
+
+const smashSurprises = [
+  "🎈 驚喜：你剛剛按掉了 1 顆「委屈球」。",
+  "🍊 驚喜：情緒已自動切換成「橘子模式」：酸甜可控。",
+  "🧠 驚喜：前額葉回來上班了（但可能還在路上）。",
+  "🫶 驚喜：你已經夠好了，先休息一下。",
+  "🎬 驚喜：這段可以剪掉，改成溫柔版。",
+  "🧯 驚喜：你剛剛其實在滅火。很會。"
+];
+
+function smash(){
+  smashCount++;
+  // 連按判定：900ms 內算 combo
+  clearTimeout(smashTimer);
+  smashTimer = setTimeout(()=>{ smashCombo = 0; }, 900);
+  smashCombo++;
+
+  let text = pick(smashWords);
+
+  if(smashCombo === 5){
+    text = "好，這一輪按得很有感覺。";
+  }else if(smashCombo === 10){
+    text = "你已經按掉不少情緒了 😂";
+  }else if(smashCombo === 15){
+    text = pick(smashSurprises);
+    smashCombo = 0; // 重置，避免壓力
+  }
+
+  document.getElementById("smashText").innerText = text;
+  document.getElementById("smashSpark").innerText = `連按：${smashCombo}（想停就停）`;
+}
+
+/* =========================
+   自創句庫（可新增/刪除）
+========================= */
+const LS_KEY = "HP_FUNNY_MOOD_PACK_V1_CUSTOM";
+function loadCustom(){
+  try{ return JSON.parse(localStorage.getItem(LS_KEY) || "[]"); }
+  catch(e){ return []; }
+}
+function saveCustom(){
   const input = document.getElementById("customInput");
-  if (!input.value.trim()) return;
-  const list = JSON.parse(localStorage.getItem("customLines") || "[]");
-  list.push(input.value.trim());
-  localStorage.setItem("customLines", JSON.stringify(list));
+  const v = (input.value || "").trim();
+  if(!v) return;
+
+  const list = loadCustom();
+  list.unshift(v);
+  // 去重
+  const uniq = Array.from(new Set(list));
+  localStorage.setItem(LS_KEY, JSON.stringify(uniq.slice(0, 60))); // 上限 60 句
   input.value = "";
-  alert("已存，下次會出現 😊");
+  renderCustom();
+  alert("已存 ✅ 下次會抽到");
+}
+function deleteCustom(idx){
+  const list = loadCustom();
+  list.splice(idx, 1);
+  localStorage.setItem(LS_KEY, JSON.stringify(list));
+  renderCustom();
+}
+function useCustom(text){
+  document.getElementById("parentText").innerText = text;
+}
+function renderCustom(){
+  const box = document.getElementById("customList");
+  const list = loadCustom();
+  box.innerHTML = "";
+
+  if(list.length === 0){
+    const d = document.createElement("div");
+    d.className = "tiny";
+    d.style.textAlign = "left";
+    d.textContent = "目前還沒有自創句子。你存一句，下次就會出現。";
+    box.appendChild(d);
+    return;
+  }
+
+  list.forEach((t, i)=>{
+    const row = document.createElement("div");
+    row.className = "item";
+
+    const b = document.createElement("button");
+    b.className = "itemBtn";
+    b.type = "button";
+    b.textContent = t;
+    b.onclick = ()=> useCustom(t);
+
+    const del = document.createElement("button");
+    del.className = "delBtn";
+    del.type = "button";
+    del.textContent = "刪除";
+    del.onclick = ()=> deleteCustom(i);
+
+    row.appendChild(b);
+    row.appendChild(del);
+    box.appendChild(row);
+  });
 }
 
-function goConcept() {
-  window.open("https://angel0973180707.github.io/angel-happy-paw/", "_blank");
-}
-
-function goChannel() {
-  window.open("https://www.youtube.com/", "_blank");
-}
+/* init */
+renderCustom();
 </script>
-
 </body>
 </html>
