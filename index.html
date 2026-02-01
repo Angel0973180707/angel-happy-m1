@@ -35,7 +35,6 @@
   *{ box-sizing:border-box; }
   body{
     margin:0;
-    /* ✅ 圓潤字體優先序：不同手機會自動挑最圓的 */
     font-family:
       "Noto Sans TC",
       "PingFang TC",
@@ -52,10 +51,11 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* ✅ 斷字修正：中文不硬切，但超長也不爆 */
+  /* ✅ 斷字修正：中文不亂切、括號不亂拆 */
   .wrapSafe{
-    word-break: keep-all;
-    overflow-wrap: anywhere;
+    word-break: normal;
+    overflow-wrap: break-word;
+    line-break: strict;
     hyphens: none;
   }
 
@@ -75,12 +75,12 @@
 
   h1{
     margin:0;
-    /* ✅ 標題字再小一點 + 行高舒服 + 避免孤字 */
     font-size: 1.22rem;
     line-height: 1.35;
     font-weight: 700;
     letter-spacing:.02em;
-    word-break: keep-all;
+    word-break: normal;
+    line-break: strict;
   }
 
   .subtitle{
@@ -129,6 +129,8 @@
     font-weight: 800;
     margin: 0 0 10px;
     font-size: 1.02rem;
+    word-break: normal;
+    line-break: strict;
   }
 
   .quote{
@@ -137,9 +139,15 @@
     border-radius: 16px;
     padding: 12px 12px;
     line-height: 1.65;
-    font-weight: 650; /* ✅ 圓潤感：不要太硬的 900 */
+    font-weight: 650;
     text-align:center;
     font-size: .98rem;
+
+    /* ✅ 讓 \n 真的換行，且不亂拆字 */
+    white-space: pre-line;
+    word-break: normal;
+    overflow-wrap: break-word;
+    line-break: strict;
   }
 
   .tiny{
@@ -149,6 +157,9 @@
     line-height: 1.5;
     text-align:center;
     font-weight: 500;
+    word-break: normal;
+    overflow-wrap: break-word;
+    line-break: strict;
   }
 
   button{
@@ -165,8 +176,9 @@
     background: linear-gradient(135deg, var(--brand), var(--brand2));
     box-shadow: 0 10px 16px rgba(255,159,67,.22);
     white-space: normal;
-    word-break: keep-all;
-    overflow-wrap: anywhere;
+    word-break: normal;
+    overflow-wrap: break-word;
+    line-break: strict;
   }
   button:active{ transform: translateY(1px); }
 
@@ -224,6 +236,9 @@
     text-align:left;
     line-height:1.45;
     font-size: .92rem;
+    word-break: normal;
+    overflow-wrap: break-word;
+    line-break: strict;
   }
   .delBtn{
     border-radius: 16px;
@@ -278,7 +293,7 @@
     </div>
   </header>
 
-  <!-- ✅ 0｜每日彩蛋（一天最多跳一次） -->
+  <!-- ✅ 0｜每日彩蛋（一天最多跳一次，但內容會被存起來） -->
   <div class="card">
     <div class="cardTitle">0｜每日彩蛋（給你一個偷偷笑）</div>
     <div class="quote" id="eggText">今天的彩蛋還沒打開。</div>
@@ -386,8 +401,6 @@ function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
 /* =========================
    ✅ 可愛音效（無需外部檔案）
-   - 用 WebAudio 產生短音色
-   - 行動裝置第一次點擊後會啟動
 ========================= */
 let SOUND_ON = true;
 let audioCtx = null;
@@ -415,22 +428,20 @@ function beep(type="tap"){
   const o = ctx.createOscillator();
   const g = ctx.createGain();
 
-  // 更可愛：用 triangle/sine 混合感
   o.type = (type === "surprise" || type === "win") ? "triangle" : "sine";
 
   const base = {
-    tap: [740, 980],        // 啾
-    soft: [520, 660],       // 柔
-    smash: [420, 540],      // 咚
-    surprise: [880, 1320],  // 叮咚
-    win: [988, 1318],       // 小勝利
+    tap: [740, 980],
+    soft: [520, 660],
+    smash: [420, 540],
+    surprise: [880, 1320],
+    win: [988, 1318],
     error: [220, 180]
   }[type] || [740, 980];
 
   o.frequency.setValueAtTime(base[0], now);
   o.frequency.exponentialRampToValueAtTime(base[1], now + 0.06);
 
-  // 音量包絡：很短、很可愛、不刺耳
   g.gain.setValueAtTime(0.0001, now);
   g.gain.exponentialRampToValueAtTime(0.10, now + 0.01);
   g.gain.exponentialRampToValueAtTime(0.0001, now + 0.10);
@@ -498,9 +509,7 @@ const cheerList = [
 ];
 
 /* =========================
-   ✅ 彩蛋句庫（可擴充）
-   - 一天最多跳一次（不吵）
-   - 也會混入你的自創句子（更像「人」）
+   ✅ 彩蛋句庫
 ========================= */
 const eggList = [
   "🎬 今日彩蛋：剛剛那段情緒，如果剪輯師在，他會幫你上柔焦。",
@@ -536,9 +545,11 @@ function cheerMeUp(){
 }
 
 /* =========================
-   ✅ 彩蛋：一天最多一次
+   ✅ 彩蛋：一天最多一次，但「內容會被存起來」
 ========================= */
 const LS_EGG_LAST = "HP_FUNNY_MOOD_PACK_EGG_LAST_DATE";
+const LS_EGG_TEXT = "HP_FUNNY_MOOD_PACK_EGG_TODAY_TEXT";
+
 function todayKey(){
   const d = new Date();
   const y = d.getFullYear();
@@ -547,31 +558,40 @@ function todayKey(){
   return `${y}-${m}-${da}`;
 }
 
-function showDailyEgg(force=false){
+function buildEggText(){
+  const custom = loadCustom();
+  const extra = custom.length ? `\n\n—— 來自你自己留下的一句：\n${pick(custom)}` : "";
+  return pick(eggList) + extra;
+}
+
+function showDailyEgg(){
   const key = todayKey();
   const last = localStorage.getItem(LS_EGG_LAST) || "";
-  if(!force && last === key){
-    // 已經看過今天彩蛋
-    document.getElementById("eggText").innerText = "今天的彩蛋你已經領過了 😄（想再看一次可以再按）";
+  const saved = localStorage.getItem(LS_EGG_TEXT) || "";
+
+  // ✅ 已領過：直接顯示「存好的內容」，不會空
+  if(last === key && saved){
+    document.getElementById("eggText").innerText =
+      saved + "\n\n（今天你已經領過了 😄 想再看一次可以再按）";
     beep("soft");
     return;
   }
 
-  // 彩蛋池：內建 + 自創句子（更有真實感）
-  const custom = loadCustom();
-  const pool = eggList.concat(custom.length ? ["—— 來自你自己留下的一句：\n" + pick(custom)] : []);
-  document.getElementById("eggText").innerText = pick(pool);
-
+  // ✅ 沒領過：抽一個並存起來
+  const text = buildEggText();
   localStorage.setItem(LS_EGG_LAST, key);
+  localStorage.setItem(LS_EGG_TEXT, text);
+
+  document.getElementById("eggText").innerText = text;
   beep("surprise");
 }
 
-/* 進站自動彈一次（但一天一次） */
+/* ✅ 進站自動彈一次：只在「今天尚未領過」才抽，且會存內容 */
 function autoEggOncePerDay(){
   const key = todayKey();
   const last = localStorage.getItem(LS_EGG_LAST) || "";
   if(last !== key){
-    showDailyEgg(false);
+    showDailyEgg();
   }
 }
 
@@ -596,12 +616,10 @@ const smashSurprises = [
 ];
 
 function smash(){
-  // 連按判定：900ms 內算 combo
   clearTimeout(smashTimer);
   smashTimer = setTimeout(()=>{ smashCombo = 0; document.getElementById("smashSpark").innerText = ""; }, 900);
   smashCombo++;
 
-  // 基本按鍵聲：越按越像咚咚咚（但仍可愛）
   beep(smashCombo >= 10 ? "smash" : "tap");
 
   let text = pick(smashWords);
@@ -612,8 +630,8 @@ function smash(){
     text = "你已經按掉不少情緒了 😂";
   }else if(smashCombo === 15){
     text = pick(smashSurprises);
-    beep("surprise"); // ✅ 彩蛋音
-    smashCombo = 0;   // 重置，避免壓力
+    beep("surprise");
+    smashCombo = 0;
   }
 
   document.getElementById("smashText").innerText = text;
@@ -638,7 +656,6 @@ function saveCustom(){
 
   const list = loadCustom();
   list.unshift(v);
-  // 去重
   const uniq = Array.from(new Set(list));
   localStorage.setItem(LS_KEY, JSON.stringify(uniq.slice(0, 60)));
   input.value = "";
@@ -698,13 +715,13 @@ function renderCustom(){
 /* init */
 renderCustom();
 
-/* 小提醒：有些手機需要「第一次點擊」才會啟動音效 */
+/* 有些手機需要「第一次點擊」才會啟動音效 */
 document.addEventListener("click", ()=>{ ensureAudio(); }, { once:true });
 
-/* ✅ 進站：彩蛋一天最多一次（不吵） */
+/* ✅ 進站：彩蛋一天最多一次（且內容會存起來） */
 window.addEventListener("load", ()=>{ autoEggOncePerDay(); });
 
-/* ✅ PWA：註冊 Service Worker（才會真正可安裝/離線） */
+/* ✅ PWA：註冊 Service Worker */
 if("serviceWorker" in navigator){
   window.addEventListener("load", ()=>{
     navigator.serviceWorker.register("./sw.js").catch(()=>{});
