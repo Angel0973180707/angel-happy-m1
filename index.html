@@ -274,9 +274,18 @@
 
       <button class="ghost small" onclick="goConcept()">幸福教養概念館</button>
       <button class="ghost small" onclick="goChannel()">天使笑長頻道</button>
-      <button class="ghost small" onclick="openFeedback()" disabled>回饋表單（預留）</button>
+      <button class="ghost small" onclick="openFeedback()">回饋表單</button>
     </div>
   </header>
+
+  <!-- ✅ 0｜每日彩蛋（一天最多跳一次） -->
+  <div class="card">
+    <div class="cardTitle">0｜每日彩蛋（給你一個偷偷笑）</div>
+    <div class="quote" id="eggText">今天的彩蛋還沒打開。</div>
+    <button class="secondary" onclick="showDailyEgg()">🎁 打開今日彩蛋</button>
+    <button class="ghost small" onclick="openFeedback()">我也要留一句（去表單）</button>
+    <div class="tiny">彩蛋一天最多跳一次，不吵你。你願意回來就很好。</div>
+  </div>
 
   <!-- 1｜荒謬急救 -->
   <div class="card">
@@ -334,7 +343,7 @@
 const LINKS = {
   concept: "https://angel0973180707.github.io/angel-happy-paw/",
   channel: "https://www.youtube.com/@%E5%A4%A9%E4%BD%BF%E7%AC%91%E9%95%B7",
-  feedback: "" // 預留：之後放 Google Form / Notion
+  feedback: "https://forms.gle/EBEJ2ac45nwnq7KGA"
 };
 
 function goConcept(){ window.open(LINKS.concept, "_blank", "noopener,noreferrer"); }
@@ -489,6 +498,24 @@ const cheerList = [
 ];
 
 /* =========================
+   ✅ 彩蛋句庫（可擴充）
+   - 一天最多跳一次（不吵）
+   - 也會混入你的自創句子（更像「人」）
+========================= */
+const eggList = [
+  "🎬 今日彩蛋：剛剛那段情緒，如果剪輯師在，他會幫你上柔焦。",
+  "🍊 今日彩蛋：你不是在崩潰，你是在「橘子去皮」——有點黏，但會甜。",
+  "🧠 今日彩蛋：前額葉正在趕來的路上，請先用一口水幫它開路。",
+  "🫶 今日彩蛋：你已經很努力了，今天先把自己抱回來。",
+  "🧯 今日彩蛋：你沒有輸，你只是選擇不再用火解決火。",
+  "🌤️ 今日彩蛋：先讓心回到身體裡，剩下的明天再說。",
+  "🎈 今日彩蛋：你剛剛做到一件事——沒有把小事升級成世界末日。",
+  "🧸 今日彩蛋：你不是情緒太多，你是責任太滿。",
+  "💛 今日彩蛋：願意回來的人，都很勇敢。",
+  "😄 今日彩蛋：別怕，今天的你只是「累到沒開美肌」。"
+];
+
+/* =========================
    顯示
 ========================= */
 function absurdRescue(){
@@ -506,6 +533,46 @@ function parentRescue(){
 function cheerMeUp(){
   beep("win");
   document.getElementById("cheerText").innerText = pick(cheerList);
+}
+
+/* =========================
+   ✅ 彩蛋：一天最多一次
+========================= */
+const LS_EGG_LAST = "HP_FUNNY_MOOD_PACK_EGG_LAST_DATE";
+function todayKey(){
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const da = String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${da}`;
+}
+
+function showDailyEgg(force=false){
+  const key = todayKey();
+  const last = localStorage.getItem(LS_EGG_LAST) || "";
+  if(!force && last === key){
+    // 已經看過今天彩蛋
+    document.getElementById("eggText").innerText = "今天的彩蛋你已經領過了 😄（想再看一次可以再按）";
+    beep("soft");
+    return;
+  }
+
+  // 彩蛋池：內建 + 自創句子（更有真實感）
+  const custom = loadCustom();
+  const pool = eggList.concat(custom.length ? ["—— 來自你自己留下的一句：\n" + pick(custom)] : []);
+  document.getElementById("eggText").innerText = pick(pool);
+
+  localStorage.setItem(LS_EGG_LAST, key);
+  beep("surprise");
+}
+
+/* 進站自動彈一次（但一天一次） */
+function autoEggOncePerDay(){
+  const key = todayKey();
+  const last = localStorage.getItem(LS_EGG_LAST) || "";
+  if(last !== key){
+    showDailyEgg(false);
+  }
 }
 
 /* =========================
@@ -633,6 +700,16 @@ renderCustom();
 
 /* 小提醒：有些手機需要「第一次點擊」才會啟動音效 */
 document.addEventListener("click", ()=>{ ensureAudio(); }, { once:true });
+
+/* ✅ 進站：彩蛋一天最多一次（不吵） */
+window.addEventListener("load", ()=>{ autoEggOncePerDay(); });
+
+/* ✅ PWA：註冊 Service Worker（才會真正可安裝/離線） */
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  });
+}
 </script>
 </body>
 </html>
